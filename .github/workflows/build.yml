@@ -1,0 +1,64 @@
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  matrix:
+    name: Get Matrix Data
+    runs-on: ubuntu-latest
+    outputs:
+      useMatrix: ${{ steps.data.outputs.useMatrix }}
+      major: ${{ steps.data.outputs.major }}
+      minor: ${{ steps.data.outputs.minor }}
+      patch: ${{ steps.data.outputs.patch }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: npm install
+        working-directory: .github/actions/split_tag
+      - name: Get Matrix Data
+        id: data
+        uses: ./.github/actions/split_tag
+        with:
+          version: ${{ GITHUB_REF }}
+  build:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    needs:
+      - matrix
+    if: needs.matrix.outputs.useMatrix == 'false'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build
+        run: docker build -t "drinternet/rsync:${{ needs.matrix.outputs.major }}" .
+      - name: Sign Into Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Push to Hub
+        run: docker push drinternet/rsync:${{ needs.matrix.outputs.major }}
+  matrix-build:
+    strategy:
+      matrix:
+        version:
+          - ${{ needs.matrix.outputs.major }}
+          - ${{ needs.matrix.outputs.minor }}
+          - ${{ needs.matrix.outputs.patch }}
+    runs-on: ubuntu-latest
+    name: Build and Deploy (${{ matrix.version }})
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build
+        run: docker build -t "drinternet/rsync:${{ matrix.version }}" .
+      - name: Sign Into Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Push to Hub
+        run: docker push drinternet/rsync:${{ needs.matrix.outputs.major }}
