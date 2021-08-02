@@ -2,3 +2,4 @@ Dockerfile
 LICENSE
 *.md
 .git*
+.github*

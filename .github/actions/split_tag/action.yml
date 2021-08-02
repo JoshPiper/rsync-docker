@@ -1,0 +1,9 @@
+name: Split Tag
+description: Split a tag into major, minor and patch overrides, such as v1.2.3 -> v1, v1.2, v1.2.3, ex for docker tags.
+inputs:
+  version:
+    required: true
+    description: version or git reference.
+runs:
+  using: node12
+  main: action.js
