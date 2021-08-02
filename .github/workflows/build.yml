@@ -22,7 +22,7 @@ jobs:
         id: data
         uses: ./.github/actions/split_tag
         with:
-          version: ${{ GITHUB_REF }}
+          version: ${{ github.ref }}
   build:
     name: Build and Deploy
     runs-on: ubuntu-latest
