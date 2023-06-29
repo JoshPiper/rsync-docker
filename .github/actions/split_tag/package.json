@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "@actions/core": "^1.9.1",
-    "semver": "^7.3.5"
+    "semver": "^7.5.2"
   }
 }
