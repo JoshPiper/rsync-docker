@@ -1,4 +1,4 @@
-FROM alpine:3.22.1
+FROM alpine:3.22.2
 MAINTAINER Dr Internet <internet@limelightgaming.net>
 
 # Install RSync and Open SSH.
