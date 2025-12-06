@@ -2,6 +2,11 @@
 
 A simple alpine based docker image for rsync and ssh deployments.
 
+> [!IMPORTANT]
+> This project is no longer being maintained.
+> A continuation can be found with [Burnett01/rsync-deployments](https://github.com/Burnett01/rsync-deployments), namely its scripts and Dockerfile.
+> Publically available Docker Hub images will remain in place for at least 6 months (June 2026), but after that may be removed.
+
 ## Using this image
 This image has two primary uses. Firstly, as a deployment image for GitLab CI runs. Secondly, as a base image for other images.
 
